@@ -30,17 +30,17 @@ class MadgwickFusion:
         # normalize data
         acc_norm = self.normalize_vector(acc)
         gyro_norm = self.normalize_vector(gyro)
-        magneto = self.normalize_vector(magneto)
+        magneto_norm = self.normalize_vector(magneto)
 
         # compute the objective function and jacobian
         SE_q_comp = self.SE_q.components
         f = np.array(
-            [2 * SE_q_comp[0] * SE_q_comp[3] - 2 * SE_q_comp[0] * SE_q_comp[2] - acc[0],
-             2 * SE_q_comp[1] * SE_q_comp[1] + 2 * SE_q_comp[2] * SE_q_comp[3] - acc[1],
-             1 - 2 * SE_q_comp[1] * SE_q_comp[1] - 2 * SE_q_comp[2] * SE_q_comp[2] - acc[2],
-             2 * self.b_x * (0.5 - SE_q_comp[2] * SE_q_comp[2] - SE_q_comp[3] * SE_q_comp[3]) + 2 * self.b_z * (SE_q_comp[1] * SE_q_comp[3] - SE_q_comp[0] * SE_q_comp[2]) - magneto[0],
-             2 * self.b_x * (SE_q_comp[1] * SE_q_comp[2] - SE_q_comp[0] * SE_q_comp[3] + 2 * self.b_z * (SE_q_comp[0] * SE_q_comp[1] + SE_q_comp[2] * SE_q_comp[3]) - magneto[1]),
-             2 * self.b_x * (SE_q_comp[0] * SE_q_comp[3]) + 2 * self.b_z * (0.5 - SE_q_comp[1] * SE_q_comp[1] - SE_q_comp[2] * SE_q_comp[2]) - magneto[2]])
+            [2 * SE_q_comp[0] * SE_q_comp[3] - 2 * SE_q_comp[0] * SE_q_comp[2] - acc_norm[0],
+             2 * SE_q_comp[1] * SE_q_comp[1] + 2 * SE_q_comp[2] * SE_q_comp[3] - acc_norm[1],
+             1 - 2 * SE_q_comp[1] * SE_q_comp[1] - 2 * SE_q_comp[2] * SE_q_comp[2] - acc_norm[2],
+             2 * self.b_x * (0.5 - SE_q_comp[2] * SE_q_comp[2] - SE_q_comp[3] * SE_q_comp[3]) + 2 * self.b_z * (SE_q_comp[1] * SE_q_comp[3] - SE_q_comp[0] * SE_q_comp[2]) - magneto_norm[0],
+             2 * self.b_x * (SE_q_comp[1] * SE_q_comp[2] - SE_q_comp[0] * SE_q_comp[3] + 2 * self.b_z * (SE_q_comp[0] * SE_q_comp[1] + SE_q_comp[2] * SE_q_comp[3]) - magneto_norm[1]),
+             2 * self.b_x * (SE_q_comp[0] * SE_q_comp[3]) + 2 * self.b_z * (0.5 - SE_q_comp[1] * SE_q_comp[1] - SE_q_comp[2] * SE_q_comp[2]) - magneto_norm[2]])
 
     def normalize_vector(self, vector):
         norm = np.linalg.norm(vector, ord=2)
