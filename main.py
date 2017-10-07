@@ -1,28 +1,14 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import quaternion
+from madgwick import MadgwickFusion
 
 def main():
-    Fuse('sample.csv')
+    df = pd.read_csv('sample.csv', header=None, sep=',')
+    madgwick = MadgwickFusion(1, 1, 1)
 
-    df = pd.read_csv(file, header=None, sep=',')
-
-    quaternions_x = []
-    quaternions_y = []
-    quaternions_z = []
-    quaternions_w = []
-
-    for i in range(0, df[0].size):
-        accel = np.array([float(df[0][i]), float(df[1][i]), float(df[2][i])])
-        gyro = np.array([float(df[3][i]), float(df[4][i]), float(df[5][i])])
-        magneto = np.array([float(df[6][i]), float(df[7][i]), float(df[8][i])])
-
-
-        quaternions_x.append(x)
-        quaternions_y.append(y)
-        quaternions_z.append(z)
-        quaternions_w.append(w)
+    for row in df.values:
+        madgwick.filter_update(row[0:3], row[3:6], row[6:9])
 
 
 if __name__ == "__main__":
