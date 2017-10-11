@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import quaternion
 from madgwick import MadgwickFusion
 
 def main():
